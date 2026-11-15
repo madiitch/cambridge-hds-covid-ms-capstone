@@ -1,0 +1,106 @@
+---
+title: "Disease-modifying therapy and reported COVID-19 symptoms in multiple sclerosis"
+subtitle: "Analysis-ready data asset | Working prototype v0.1"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    theme: cosmo
+    code_folding: hide
+bibliography: references.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, warning=TRUE, message=FALSE, fig.width=8, fig.height=4.5, dpi=150)
+source('R/run_pipeline.R', local=TRUE)
+library(ggplot2)
+library(dplyr)
+theme_set(theme_minimal(base_size=12))
+```
+
+# Abstract (working outline)
+
+**Background:** Disease-modifying therapies (DMTs) may alter immune responses, but symptom reports and diagnostic categories are not interchangeable [@sormani2021; @struyf2022]. **Aim:** Develop a documented, validated data asset for examining treatment–symptom associations and reporting heterogeneity. **Methods:** Audit the open GDSI dataset, specify phenotypes and assess readiness for logistic regression. **Results:** To be completed after local execution and interpretation. **Conclusion:** To be written independently after validation.
+
+# Research question and rationale
+
+How is disease-modifying therapy status associated with reported COVID-19 symptoms in people with multiple sclerosis, and how does this association vary across diagnostic classifications and reporting sources?
+
+## Literature review — working synthesis
+
+Research on COVID-19 severity in MS has identified treatment-specific associations, particularly for anti-CD20 therapies [@sormani2021; @simpson2022]. These results motivate investigation of treatment heterogeneity but cannot establish associations with symptom occurrence. Community-based research distinguishes self-diagnosed and confirmed COVID-19 [@evangelou2020]. Symptom-based identification has limited diagnostic specificity [@struyf2022]. Conditioning on diagnostic classification may introduce selection bias under plausible causal structures [@hernan2004]. The student should critically compare study populations, endpoints, timing, adjustment strategies and overlapping registries before finalising this section.
+
+# Source data and study specification
+
+The source is the open COVID-MS GDSI dataset distributed through the Cambridge course repository. The observation unit is a source participant record. This is an observational secondary analysis; temporal order and representativeness are not established. Verify the original descriptor, collection period, licence and anonymisation details before submission [@khan2024].
+
+```{r source-summary}
+knitr::kable(data.frame(records=nrow(raw), variables=ncol(raw), duplicate_ids=sum(duplicated(raw$secret_name))))
+```
+
+# Source-data assessment
+
+## Missingness and variable utility
+
+```{r missingness}
+audit |> filter(missing_n>0) |> slice_head(n=15) |> ggplot(aes(reorder(variable,missing_pct),missing_pct)) + geom_col(fill='#315C78') + coord_flip() + labs(x=NULL,y='Missing (%)',title='Variables with greatest missingness')
+```
+
+```{r missing-source}
+missing_by_source |> filter(variable %in% c('covid19_has_symptoms','edss_in_cat2','bmi_in_cat2','current_or_former_smoker','dmt_type_overall')) |> ggplot(aes(report_source,variable,fill=missing_pct)) + geom_tile() + geom_text(aes(label=sprintf('%.1f%%',missing_pct))) + scale_fill_gradient(low='#F2F5F7',high='#527C96',limits=c(0,100)) + labs(x=NULL,y=NULL,fill='Missing %')
+```
+
+Interpretation prompt: distinguish structural missingness from unknown values; inspect EDSS and smoking variation. Do not recode missing as absence.
+
+## Diagnostic and reporting heterogeneity
+
+```{r diagnostic-symptoms}
+knitr::kable(dx_sym)
+dx_sym |> mutate(symptom_status=coalesce(covid19_has_symptoms,'Missing')) |> ggplot(aes(covid19_diagnosis,n,fill=symptom_status)) + geom_col(position='fill') + scale_y_continuous(labels=scales::label_percent()) + labs(x='Recorded diagnosis',y='Within-category proportion',fill='Symptoms')
+```
+
+```{r reporting-diagnosis}
+source_dx |> ggplot(aes(report_source,n,fill=covid19_diagnosis)) + geom_col(position='fill') + scale_y_continuous(labels=scales::label_percent()) + labs(x='Reporting source',y='Within-source proportion',fill='Diagnosis')
+```
+
+```{r three-way}
+three_way |> mutate(symptom_status=coalesce(covid19_has_symptoms,'Missing')) |> ggplot(aes(covid19_diagnosis,n,fill=symptom_status)) + geom_col(position='fill') + facet_wrap(~report_source) + scale_y_continuous(labels=scales::label_percent()) + labs(x='Diagnosis',y='Within-group proportion',fill='Symptoms')
+```
+
+Interpretation prompt: compare conditional proportions and cell counts. Internal agreement is not diagnostic accuracy; reporting source may reflect recruitment and testing differences.
+
+## Treatment status and symptom reporting
+
+```{r treatment}
+dmt_summary <- ard |> group_by(dmt_status) |> summarise(total=n(), observed=sum(!is.na(symptoms)), symptomatic=sum(symptoms==1,na.rm=TRUE), proportion=symptomatic/observed,.groups='drop')
+knitr::kable(dmt_summary,digits=3)
+ggplot(dmt_summary,aes(dmt_status,proportion)) + geom_col(fill='#315C78') + scale_y_continuous(labels=scales::label_percent(),limits=c(0,1)) + labs(x='DMT status',y='Proportion among observed symptom records')
+```
+
+# Phenotype definitions and preparation
+
+See `metadata/phenotype_definitions.md`, `metadata/data_dictionary.csv` and `metadata/decision_log.csv`. The primary outcome is reported symptom presence; the exposure is DMT status at data entry. Preserve original source data and retain eligibility flags. The candidate adjusted analysis includes age, sex, MS phenotype and comorbidities; this set requires independent clinical justification.
+
+# Validation and analytical readiness
+
+```{r validation}
+knitr::kable(flow)
+knitr::kable(model_checks)
+```
+
+```{r subgroup-support}
+knitr::kable(ard |> filter(eligible_primary) |> group_by(diagnosis,reporting_source) |> summarise(n=n(),events=sum(symptoms),non_events=sum(symptoms==0),.groups='drop'))
+```
+
+The intended method is binary logistic regression. Subgroup estimation requires both outcome levels, adequate support across exposure categories and assessment of separation. Do not fit a model simply because the software returns coefficients. The prototype exports the model matrix rank check; it does not yet establish model adequacy or fit a final model.
+
+# Critical reflection and governance
+
+Develop discussion of confounding by indication, treatment heterogeneity, symptom misclassification, selection and reporting bias, missingness, de-identification and responsible reuse. Explain why diagnosis is not automatically an adjustment variable. Distinguish association from causation and avoid extrapolating to all people with MS. Review the source licence and university AI policy.
+
+# Reproducibility
+
+Run the pipeline from the project root; source data remain unchanged. The CSV and RDS are generated in `data/processed/`. Audit tables and session information are generated in `outputs/`. See README for Git and dependency setup. Final submission must be tested in a fresh R session.
+
+# References

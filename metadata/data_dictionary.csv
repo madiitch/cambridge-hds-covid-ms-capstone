@@ -1,0 +1,15 @@
+variable,source,type,definition,role
+participant_id,secret_name,character,Source pseudonymous identifier,key
+dmt_status,current_dmt,factor,Never Former Current,exposure
+symptoms,covid19_has_symptoms,integer,1 yes 0 no NA unknown,outcome
+diagnosis,covid19_diagnosis,factor,not_suspected suspected confirmed,cohort assessment
+confirmed_case,covid19_confirmed_case,character,yes no,validation
+reporting_source,report_source,factor,patients clinicians,reporting assessment
+age_group,age_in_cat,factor,0 under 18; 1 18-50; 2 51-70; 3 71+,candidate covariate
+sex,sex,factor,Source sex categories,candidate covariate
+ms_type,ms_type2,factor,Source MS phenotype including heterogeneous other,candidate covariate
+comorbidities,has_comorbidities,factor,Any reported comorbidity,candidate covariate
+dmt_type,dmt_type_overall,character,Specific source treatment category,exposure assessment
+eligible_primary,derived,logical,Observed exposure and outcome,eligibility
+eligible_adjusted,derived,logical,Primary eligible and complete candidate covariates,eligibility
+eligible_diagnosed,derived,logical,Primary eligible and suspected or confirmed,alternative eligibility

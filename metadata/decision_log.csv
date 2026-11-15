@@ -1,0 +1,7 @@
+id,decision,rationale,status
+D01,Retain full source cohort,Diagnosis restriction may select on symptoms,provisional
+D02,Preserve three DMT categories,Former and never treated may differ,provisional
+D03,Preserve missing symptom values,Missing is not absence,provisional
+D04,Do not use EDSS as candidate predictor,No observed variation and substantial missingness,verify
+D05,Do not automatically fit subgroup models,Potential separation and sparse cells,verify
+D06,Do not automatically adjust for reporting source or diagnosis,Selection and measurement mechanisms uncertain,review literature
