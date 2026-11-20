@@ -1,0 +1,1138 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  british,
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+\ifLuaTeX
+\usepackage[bidi=basic,shorthands=off]{babel}
+\else
+\usepackage[bidi=default,shorthands=off]{babel}
+\fi
+\ifLuaTeX
+  \usepackage{selnolig} % disable illegal ligatures
+\fi
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+% fallback for those not using the hyperref driver hyperxmp:
+\makeatletter
+\@ifundefined{xmpquote}{\newcommand{\xmpquote}[1]{#1}}{}
+\makeatother
+\hypersetup{
+  pdftitle={Disease-modifying therapies and COVID-19 symptom reporting in multiple sclerosis},
+  pdfauthor={Zina Tevzadze \textbar{} MSt Healthcare Data Science \textbar{} University of Cambridge},
+  pdflang={en-GB},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Disease-modifying therapies and COVID-19 symptom reporting in
+multiple sclerosis}
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{Development and validation of an analysis-ready dataset}
+\author{Zina Tevzadze \textbar{} MSt Healthcare Data Science \textbar{}
+University of Cambridge}
+\date{November 2026}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{2}
+\tableofcontents
+}
+\section*{Abstract}\label{abstract}
+\addcontentsline{toc}{section}{Abstract}
+
+\textbf{Background:} Disease-modifying therapies (DMTs) may alter immune
+responses, but symptom reports and diagnostic categories are not
+interchangeable (\citeproc{ref-sormani2021}{{Sormani et al.} 2021};
+\citeproc{ref-struyf2022}{{Struyf et al.} 2022}). \textbf{Aim:} Develop
+a documented, validated data asset for examining treatment--symptom
+associations and reporting heterogeneity. \textbf{Methods:} Audit the
+open GDSI dataset, specify phenotypes and assess readiness for logistic
+regression. \textbf{Results:} To be completed after local execution and
+interpretation. \textbf{Conclusion:} To be written independently after
+validation.
+
+\section{Introduction and Literature
+Review}\label{introduction-and-literature-review}
+
+\subsection{Clinical background}\label{clinical-background}
+
+Multiple sclerosis (MS) is a chronic immune-mediated disorder of the
+central nervous system characterised by inflammation, demyelination and
+neurodegeneration. Disease-modifying therapies (DMTs) aim to reduce
+inflammatory disease activity and limit disability accumulation.
+However, their effects on immune function differ according to their
+mechanisms of action, potentially influencing susceptibility to
+infection and subsequent clinical manifestations.
+
+The COVID-19 pandemic raised concerns regarding the management of people
+with MS, particularly those receiving immunosuppressive or
+immunomodulatory therapies. International data-sharing initiatives were
+established to investigate these concerns using real-world clinical and
+patient-reported information (\citeproc{ref-peeters2020}{{Peeters et
+al.} 2020}).
+
+\subsection{Disease-modifying therapies and
+COVID-19}\label{disease-modifying-therapies-and-covid-19}
+
+Observational studies have identified heterogeneous associations between
+individual DMTs and COVID-19 severity. Sormani et al.~reported an
+association between anti-CD20 treatment and more severe COVID-19
+outcomes (\citeproc{ref-sormani2021}{{Sormani et al.} 2021}). Similarly,
+international analyses identified associations between rituximab,
+ocrelizumab and adverse clinical outcomes, alongside patient
+characteristics such as age, MS phenotype and disability
+(\citeproc{ref-simpson2022}{{Simpson-Yap et al.} 2022}).
+
+These findings suggest that treating DMT exposure as a homogeneous
+category may obscure clinically meaningful differences. In particular,
+B-cell-depleting therapies have distinct immunological effects compared
+with other DMT classes, motivating a mechanism-based classification of
+treatment exposure.
+
+Nevertheless, evidence concerning COVID-19 severity among infected
+individuals cannot be directly extrapolated to the occurrence of
+reported symptoms. Community-based research has demonstrated that
+associations may differ according to whether COVID-19 is self-diagnosed
+or laboratory-confirmed (\citeproc{ref-evangelou2021}{{Evangelou et al.}
+2021}). Furthermore, symptoms alone have limited diagnostic specificity
+for SARS-CoV-2 infection (\citeproc{ref-struyf2022}{{Struyf et al.}
+2022}).
+
+\subsection{Research rationale and
+objectives}\label{research-rationale-and-objectives}
+
+The publicly available COVID-MS dataset provides an opportunity to
+investigate treatment--symptom associations using heterogeneous
+real-world data (\citeproc{ref-khan2024}{Khan et al. 2024}). However,
+differences in reporting source, diagnostic classification, clinical
+granularity and data completeness may affect the validity and
+interpretability of subsequent analyses.
+
+\textbf{Research question:} How are disease-modifying therapy status and
+anti-CD20 exposure associated with reported COVID-19-compatible symptoms
+in people with multiple sclerosis?
+
+This study aims to construct and validate an analysis-ready dataset
+suitable for multivariable logistic regression. The approach emphasises
+clinically justified exposure definitions, transparent missing-data
+management, assessment of feature redundancy and evaluation of
+statistical support.
+
+Diagnostic and reporting heterogeneity will be examined to establish the
+limitations of the resulting data asset and its suitability for the
+intended analytical use.
+
+\section{Methods}\label{methods}
+
+\subsection{Data source and study
+design}\label{data-source-and-study-design}
+
+This study used the publicly available COVID-19 in MS Global Data
+Sharing Initiative (GDSI) dataset, obtained through the Cambridge
+Healthcare Data Science repository (\citeproc{ref-khan2024}{Khan et al.
+2024}). Data were collected using a questionnaire-based platform through
+which clinicians, people with multiple sclerosis (PwMS), or their
+representatives submitted demographic, clinical, treatment and
+COVID-19-related information.
+
+The released dataset underwent de-identification, including age
+categorisation, date perturbation, k-anonymity and l-diversity
+procedures. These transformations preserve privacy but constrain
+clinical granularity and temporal interpretation.
+
+An observational, cross-sectional secondary analysis was specified, with
+the individual source record as the unit of observation. The source
+population was retained irrespective of COVID-19 diagnostic
+classification, enabling investigation of reported symptoms without
+restricting eligibility to suspected or confirmed infections.
+
+Although source identifiers were unique, patient-level uniqueness across
+reporting streams could not be independently verified.
+
+\subsection{Variable selection and phenotype
+definitions}\label{variable-selection-and-phenotype-definitions}
+
+The primary outcome was defined as the reported presence of one or more
+COVID-19-compatible symptoms, using the source variable
+\texttt{covid19\_has\_symptoms}. Positive and negative responses were
+encoded as 1 and 0, respectively, while missing responses remained
+unavailable. This phenotype represents reported symptom occurrence
+rather than confirmed SARS-CoV-2 infection or clinical severity.
+
+DMT exposure was defined at two levels: treatment status at data entry
+and mechanism-informed treatment groups. Individual drug identities were
+preserved to maintain clinical granularity. Anti-CD20 therapies
+(rituximab and ocrelizumab) were identified separately for comparison
+with other identified current DMTs, informed by previous observational
+evidence (\citeproc{ref-sormani2021}{{Sormani et al.} 2021};
+\citeproc{ref-simpson2022}{{Simpson-Yap et al.} 2022}). Unspecified and
+missing drug identities were distinguished from the absence of current
+treatment and excluded from the anti-CD20 comparison.
+
+Age, sex, MS phenotype and comorbidity status were selected as candidate
+adjustment variables. Diagnostic classification and reporting source
+were retained to evaluate reporting heterogeneity. Complete variable
+definitions, derivation rules and analytical roles were documented in
+the accompanying metadata.
+
+Individual DMT identities were retained to preserve clinical
+granularity. Mechanism-informed treatment groups were constructed for
+descriptive analysis, with anti-CD20 exposure specified separately among
+current users of identified therapies. Unspecified drug identities were
+retained as a distinct category rather than assumed to represent
+non-anti-CD20 treatment.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3826}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3652}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2522}}@{}}
+\caption{Proposed analytical variable specification.}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Variable
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Coding
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Role
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Variable
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Coding
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Role
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+DMT status & Never / Not currently / Current & Primary exposure \\
+DMT class & Mechanism-informed treatment groups & Descriptive
+classification \\
+Anti-CD20 exposure & Anti-CD20 / Other identified DMT & Secondary
+comparison \\
+COVID-19-compatible symptoms & 0 = No; 1 = Yes & Primary outcome \\
+Age & Categorical age at reporting & Candidate adjustment \\
+Sex & Source-recorded categories & Candidate adjustment \\
+MS phenotype & Relapsing-remitting / Progressive / Other & Candidate
+adjustment \\
+Comorbidity & Yes / No & Candidate adjustment \\
+Reporting source & Patient / Clinician & Reporting heterogeneity \\
+COVID-19 diagnosis & Not suspected / Suspected / Confirmed & Diagnostic
+heterogeneity \\
+Hospitalisation, ICU admission, ventilation & Source-recorded outcomes &
+Supporting clinical outcomes \\
+\end{longtable}
+
+\subsection{Data quality assessment and
+preprocessing}\label{data-quality-assessment-and-preprocessing}
+
+Source-data quality was assessed across completeness, validity,
+uniqueness and cross-field consistency. Structural checks included
+record identifiers, dataset dimensions, permitted categorical values and
+agreement between related clinical variables.
+
+Missingness was quantified overall and by reporting source. Conditional
+relationships between variables were examined to distinguish
+structurally inapplicable information from unavailable clinical
+information. Missing values were not automatically interpreted as
+negative findings or subjected to blanket imputation.
+
+Categorical variables were harmonised into explicitly defined levels,
+preserving the clinical meaning of the original source categories.
+Treatment identities were retained alongside derived treatment groups.
+
+All source records were retained in the master ARD. Analysis-specific
+eligibility indicators were derived according to outcome availability,
+exposure definition and covariate completeness. Variables with
+insufficient observed variation, uncertain clinical interpretation or
+inadequate completeness were excluded from the primary analytical
+specification.
+
+The resulting dataset was subjected to automated structural and logical
+validation, including verification of derived treatment phenotypes,
+eligibility criteria and consistency between the in-memory dataset and
+its exported RDS representation.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.3117}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.6883}}@{}}
+\caption{Summary of data preparation procedures.}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Operation
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Implementation
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Operation
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Implementation
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Structural validation & Dimensions, identifiers and permitted values \\
+Semantic harmonisation & Explicit clinical categories and reference
+levels \\
+Phenotype engineering & Binary symptoms, DMT groups and anti-CD20
+exposure \\
+Missing-data management & Preservation of missing and inapplicable
+information \\
+Cohort construction & Analysis-specific eligibility indicators \\
+Export validation & Consistency between in-memory and exported RDS
+data \\
+\end{longtable}
+
+\subsection{Analytical specification and
+validation}\label{analytical-specification-and-validation}
+
+Multivariable binary logistic regression was selected as the intended
+analytical method, reflecting the binary nature of the symptom outcome.
+Two exposure specifications were defined: overall DMT status and
+anti-CD20 treatment compared with other identified current therapies.
+
+Age, sex, MS phenotype and comorbidity status were specified as
+candidate adjustment variables based on clinical relevance. Treatment
+status and treatment class were not included simultaneously because of
+their definitional dependence.
+
+Logistic regression permits estimation of adjusted odds ratios for
+categorical treatment exposures while accommodating demographic and
+clinical covariates. Given the explanatory objective, emphasis was
+placed on exposure definition, coefficient estimability and potential
+confounding rather than predictive performance.
+
+Analytical readiness was assessed through cohort reconciliation, outcome
+variation, exposure-specific event counts and model-matrix rank. Further
+assessment of multicollinearity and separation was specified to evaluate
+the feasibility of conventional logistic regression.
+
+Diagnostic classification and reporting source were examined
+descriptively to characterise reporting heterogeneity and assess the
+feasibility of subgroup analyses. The intended analyses were
+associational rather than causal, reflecting the cross-sectional study
+design and limitations of the source data.
+
+Exposure-specific symptom proportions and 95\% Wilson confidence
+intervals were calculated descriptively to assess outcome variation and
+statistical support across treatment groups.
+
+The general analytical specification was:
+
+\[
+\log\left(\frac{p_i}{1-p_i}\right)
+=
+\beta_0 +
+\boldsymbol{\beta}^{T}\mathbf{D}_i +
+\boldsymbol{\gamma}^{T}\mathbf{X}_i
+\]
+
+where \(p_i\) denotes the probability of reported COVID-19-compatible
+symptoms, \(\mathbf{D}_i\) represents the treatment exposure and
+\(\mathbf{X}_i\) contains the candidate adjustment variables.
+
+\section{Results}\label{results}
+
+\subsection{Source-data quality and
+missingness}\label{source-data-quality-and-missingness}
+
+The source dataset comprised 1141 records and 47 variables. No missing
+or duplicated source record identifiers were identified.
+
+Patient-reported records accounted for 92.6\% of the dataset, compared
+with 7.4\% submitted by clinicians.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{missing\_labels }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}
+  \AttributeTok{edss\_in\_cat2 =} \StringTok{"EDSS"}\NormalTok{,}
+  \AttributeTok{dmt\_type\_overall =} \StringTok{"DMT identity"}\NormalTok{,}
+  \AttributeTok{current\_or\_former\_smoker =} \StringTok{"Smoking history"}\NormalTok{,}
+  \AttributeTok{covid19\_has\_symptoms =} \StringTok{"Symptom outcome"}\NormalTok{,}
+  \AttributeTok{bmi\_in\_cat2 =} \StringTok{"BMI"}
+\NormalTok{)}
+
+\NormalTok{missing\_by\_source }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{\%in\%} \FunctionTok{names}\NormalTok{(missing\_labels)) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{variable\_label =} \FunctionTok{factor}\NormalTok{(}
+      \FunctionTok{unname}\NormalTok{(missing\_labels[variable]),}
+      \AttributeTok{levels =} \FunctionTok{rev}\NormalTok{(}\FunctionTok{unname}\NormalTok{(missing\_labels))}
+\NormalTok{    ),}
+    \AttributeTok{report\_source =} \FunctionTok{factor}\NormalTok{(}
+\NormalTok{      report\_source,}
+      \AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\StringTok{"clinicians"}\NormalTok{, }\StringTok{"patients"}\NormalTok{),}
+      \AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}
+        \StringTok{"Clinician (n = 84)"}\NormalTok{,}
+        \StringTok{"Patient (n = 1,057)"}
+\NormalTok{      )}
+\NormalTok{    )}
+\NormalTok{  ) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{ggplot}\NormalTok{(}
+    \FunctionTok{aes}\NormalTok{(}
+      \AttributeTok{x =}\NormalTok{ report\_source,}
+      \AttributeTok{y =}\NormalTok{ variable\_label,}
+      \AttributeTok{fill =}\NormalTok{ missing\_pct}
+\NormalTok{    )}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{geom\_tile}\NormalTok{(}
+    \AttributeTok{colour =} \StringTok{"white"}\NormalTok{,}
+    \AttributeTok{linewidth =} \DecValTok{1}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{geom\_text}\NormalTok{(}
+    \FunctionTok{aes}\NormalTok{(}
+      \AttributeTok{label =} \FunctionTok{sprintf}\NormalTok{(}\StringTok{"\%.1f\%\%"}\NormalTok{, missing\_pct),}
+      \AttributeTok{colour =}\NormalTok{ missing\_pct }\SpecialCharTok{\textgreater{}=} \DecValTok{40}
+\NormalTok{    ),}
+    \AttributeTok{size =} \DecValTok{4}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_gradientn}\NormalTok{(}
+    \AttributeTok{colours =} \FunctionTok{rev}\NormalTok{(rocket),}
+    \AttributeTok{limits =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{100}\NormalTok{),}
+    \AttributeTok{breaks =} \FunctionTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{100}\NormalTok{, }\DecValTok{25}\NormalTok{)}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{scale\_colour\_manual}\NormalTok{(}
+    \AttributeTok{values =} \FunctionTok{c}\NormalTok{(}
+      \StringTok{"TRUE"} \OtherTok{=} \StringTok{"white"}\NormalTok{,}
+      \StringTok{"FALSE"} \OtherTok{=} \StringTok{"\#35193E"}
+\NormalTok{    ),}
+    \AttributeTok{guide =} \StringTok{"none"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Missingness by reporting source"}\NormalTok{,}
+    \AttributeTok{subtitle =} \StringTok{"Selected clinically relevant variables"}\NormalTok{,}
+    \AttributeTok{x =} \ConstantTok{NULL}\NormalTok{,}
+    \AttributeTok{y =} \ConstantTok{NULL}\NormalTok{,}
+    \AttributeTok{fill =} \StringTok{"Missing (\%)"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{panel.grid =} \FunctionTok{element\_blank}\NormalTok{(),}
+    \AttributeTok{axis.ticks =} \FunctionTok{element\_blank}\NormalTok{(),}
+    \AttributeTok{legend.position =} \StringTok{"bottom"}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{report_files/figure-latex/missing-source-1} 
+
+}
+
+\caption{Missingness in selected clinical variables by reporting source.}\label{fig:missing-source}
+\end{figure}
+
+Missingness varied substantially by reporting source. EDSS was more
+frequently unavailable in patient reports than clinician reports (57.4\%
+versus 13.1\%), whereas BMI and smoking history exhibited greater
+missingness in clinician reports. All eight missing primary symptom
+outcomes occurred among clinician-reported records. These differences
+demonstrate heterogeneous data availability across reporting streams and
+highlight the potential for selection bias under complete-case analysis.
+
+\begin{longtable}[]{@{}lrr@{}}
+\caption{Availability of drug identity by treatment
+status.}\tabularnewline
+\toprule\noalign{}
+Treatment status & Records & Missing DMT identity \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Treatment status & Records & Missing DMT identity \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+never\_treated & 160 & 160 \\
+no & 101 & 0 \\
+yes & 880 & 1 \\
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2468}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1558}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.5974}}@{}}
+\caption{Selected exclusions from the primary analytical
+specification.}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Variable
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Missing (\%)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Exclusion rationale
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Variable
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Missing (\%)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Exclusion rationale
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Treatment duration & 80.5 & Limited completeness and temporal
+information \\
+Smoking history & 56.6 & Incomplete and ambiguous coding \\
+EDSS & 54.2 & No observed variation \\
+BMI & 22.0 & Incomplete and coarsely categorised \\
+\end{longtable}
+
+Variable exclusion was not determined by missingness alone. All 523
+available EDSS observations belonged to the same released disability
+category, precluding estimation of associations with disability level.
+Exclusion of potentially relevant covariates, particularly disability
+and BMI, nevertheless limits adjustment for clinical differences between
+treatment groups.
+
+\subsection{Feature engineering and cohort
+construction}\label{feature-engineering-and-cohort-construction}
+
+The preparation pipeline produced an ARD containing 1141 records and 20
+variables. All source records were retained.
+
+The resulting data structure incorporated harmonised clinical variables,
+a binary symptom phenotype, derived treatment classifications and
+analysis-specific eligibility indicators. Original drug identities were
+preserved alongside the derived exposure definitions.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3944}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1127}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3380}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1549}}@{}}
+\caption{Derived treatment classification among current DMT
+users.}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Treatment group
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Records
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Treatments
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Percentage
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Treatment group
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Records
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Treatments
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Percentage
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Other unspecified & 185 & another drug not listed & 21.0 \\
+Injectable immunomodulators & 158 & glatiramer, interferon & 18.0 \\
+Fumarates & 145 & dimethyl fumarate & 16.5 \\
+S1P modulators & 116 & fingolimod & 13.2 \\
+Anti-CD20 & 99 & ocrelizumab, rituximab & 11.2 \\
+Trafficking inhibition & 65 & natalizumab & 7.4 \\
+Teriflunomide & 63 & teriflunomide & 7.2 \\
+Immune reconstitution & 48 & alemtuzumab, cladribine & 5.5 \\
+Unknown drug & 1 & Identity unavailable & 0.1 \\
+\end{longtable}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ard }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{filter}\NormalTok{(dmt\_status }\SpecialCharTok{==} \StringTok{"Current"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{count}\NormalTok{(dmt\_class, }\AttributeTok{name =} \StringTok{"records"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{group =} \FunctionTok{case\_when}\NormalTok{(}
+\NormalTok{      dmt\_class }\SpecialCharTok{==} \StringTok{"Anti{-}CD20"} \SpecialCharTok{\textasciitilde{}} \StringTok{"Target exposure"}\NormalTok{,}
+\NormalTok{      dmt\_class }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}
+        \StringTok{"Other unspecified"}\NormalTok{, }\StringTok{"Unknown drug"}
+\NormalTok{      ) }\SpecialCharTok{\textasciitilde{}} \StringTok{"Unidentified treatment"}\NormalTok{,}
+      \ConstantTok{TRUE} \SpecialCharTok{\textasciitilde{}} \StringTok{"Other identified treatment"}
+\NormalTok{    )}
+\NormalTok{  ) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{ggplot}\NormalTok{(}
+    \FunctionTok{aes}\NormalTok{(}
+      \AttributeTok{x =} \FunctionTok{reorder}\NormalTok{(dmt\_class, records),}
+      \AttributeTok{y =}\NormalTok{ records,}
+      \AttributeTok{fill =}\NormalTok{ group}
+\NormalTok{    )}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{geom\_col}\NormalTok{(}\AttributeTok{width =} \FloatTok{0.7}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_text}\NormalTok{(}
+    \FunctionTok{aes}\NormalTok{(}\AttributeTok{label =}\NormalTok{ records),}
+    \AttributeTok{hjust =} \SpecialCharTok{{-}}\FloatTok{0.2}\NormalTok{,}
+    \AttributeTok{size =} \FloatTok{3.5}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}
+    \AttributeTok{values =} \FunctionTok{c}\NormalTok{(}
+      \StringTok{"Target exposure"} \OtherTok{=} \StringTok{"\#AD1759"}\NormalTok{,}
+      \StringTok{"Other identified treatment"} \OtherTok{=} \StringTok{"\#35193E"}\NormalTok{,}
+      \StringTok{"Unidentified treatment"} \OtherTok{=} \StringTok{"\#B9B2BB"}
+\NormalTok{    )}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{scale\_y\_continuous}\NormalTok{(}
+    \AttributeTok{expand =} \FunctionTok{expansion}\NormalTok{(}\AttributeTok{mult =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{0.15}\NormalTok{))}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Distribution of current DMT users"}\NormalTok{,}
+    \AttributeTok{subtitle =} \StringTok{"Mechanism{-}informed treatment classification"}\NormalTok{,}
+    \AttributeTok{x =} \ConstantTok{NULL}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Number of records"}\NormalTok{,}
+    \AttributeTok{fill =} \ConstantTok{NULL}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{report_files/figure-latex/dmt-distribution-1} 
+
+}
+
+\caption{Distribution of derived treatment groups among current DMT users.}\label{fig:dmt-distribution}
+\end{figure}
+
+\begin{longtable}[]{@{}lrr@{}}
+\caption{Record retention and analytical eligibility.}\tabularnewline
+\toprule\noalign{}
+Analytical cohort & Records & Source records (\%) \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Analytical cohort & Records & Source records (\%) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Source records & 1141 & 100.0 \\
+Primary eligible & 1133 & 99.3 \\
+Adjusted eligible & 1133 & 99.3 \\
+Diagnostic subset & 275 & 24.1 \\
+Secondary anti-CD20 cohort & 687 & 60.2 \\
+\end{longtable}
+
+The primary adjusted cohort retained 99.3\% of source records, with
+eight exclusions attributable to missing symptom outcomes. Inclusion of
+the four candidate adjustment variables resulted in no additional record
+loss. Among current users of identified therapies, 687 records satisfied
+secondary analytical eligibility, including 99 anti-CD20 and 588
+comparator records.
+
+\subsection{Analytical readiness and exploratory
+findings}\label{analytical-readiness-and-exploratory-findings}
+
+\subsubsection{Diagnostic and reporting
+heterogeneity}\label{diagnostic-and-reporting-heterogeneity}
+
+The relationship between diagnostic classification and reported symptoms
+was examined to assess outcome interpretability and the feasibility of
+restricting the analytical population to suspected or confirmed COVID-19
+cases.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{diagnosis\_summary }\OtherTok{\textless{}{-}}\NormalTok{ ard }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{symptom\_status =} \FunctionTok{case\_when}\NormalTok{(}
+\NormalTok{      symptoms }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\textasciitilde{}} \StringTok{"Symptoms"}\NormalTok{,}
+\NormalTok{      symptoms }\SpecialCharTok{==} \DecValTok{0} \SpecialCharTok{\textasciitilde{}} \StringTok{"No symptoms"}\NormalTok{,}
+      \ConstantTok{TRUE} \SpecialCharTok{\textasciitilde{}} \StringTok{"Missing"}
+\NormalTok{    ),}
+    \AttributeTok{symptom\_status =} \FunctionTok{factor}\NormalTok{(}
+\NormalTok{      symptom\_status,}
+      \AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}
+        \StringTok{"Symptoms"}\NormalTok{,}
+        \StringTok{"No symptoms"}\NormalTok{,}
+        \StringTok{"Missing"}
+\NormalTok{      )}
+\NormalTok{    )}
+\NormalTok{  ) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{count}\NormalTok{(diagnosis, symptom\_status) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{group\_by}\NormalTok{(diagnosis) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{proportion =}\NormalTok{ n }\SpecialCharTok{/} \FunctionTok{sum}\NormalTok{(n)}
+\NormalTok{  ) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{ungroup}\NormalTok{()}
+
+\NormalTok{diagnosis\_summary }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{ggplot}\NormalTok{(}
+    \FunctionTok{aes}\NormalTok{(}
+      \AttributeTok{x =}\NormalTok{ diagnosis,}
+      \AttributeTok{y =}\NormalTok{ proportion,}
+      \AttributeTok{fill =}\NormalTok{ symptom\_status}
+\NormalTok{    )}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{geom\_col}\NormalTok{(}
+    \AttributeTok{width =} \FloatTok{0.65}\NormalTok{,}
+    \AttributeTok{position =} \FunctionTok{position\_stack}\NormalTok{(}\AttributeTok{reverse =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{geom\_text}\NormalTok{(}
+    \FunctionTok{aes}\NormalTok{(}
+      \AttributeTok{label =} \FunctionTok{if\_else}\NormalTok{(}
+\NormalTok{        proportion }\SpecialCharTok{\textgreater{}=} \FloatTok{0.15}\NormalTok{,}
+\NormalTok{        scales}\SpecialCharTok{::}\FunctionTok{percent}\NormalTok{(proportion, }\AttributeTok{accuracy =} \FloatTok{0.1}\NormalTok{),}
+        \StringTok{""}
+\NormalTok{      )}
+\NormalTok{    ),}
+    \AttributeTok{position =} \FunctionTok{position\_stack}\NormalTok{(}
+      \AttributeTok{vjust =} \FloatTok{0.5}\NormalTok{,}
+      \AttributeTok{reverse =} \ConstantTok{TRUE}
+\NormalTok{    ),}
+    \AttributeTok{colour =} \StringTok{"white"}\NormalTok{,}
+    \AttributeTok{size =} \FloatTok{3.5}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}
+    \AttributeTok{values =} \FunctionTok{c}\NormalTok{(}
+      \StringTok{"Symptoms"} \OtherTok{=} \StringTok{"\#AD1759"}\NormalTok{,}
+      \StringTok{"No symptoms"} \OtherTok{=} \StringTok{"\#35193E"}\NormalTok{,}
+      \StringTok{"Missing"} \OtherTok{=} \StringTok{"\#D9D9D9"}
+\NormalTok{    )}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{scale\_y\_continuous}\NormalTok{(}
+    \AttributeTok{labels =}\NormalTok{ scales}\SpecialCharTok{::}\FunctionTok{label\_percent}\NormalTok{()}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{scale\_x\_discrete}\NormalTok{(}
+    \AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}
+      \StringTok{"confirmed"} \OtherTok{=} \StringTok{"Confirmed"}\NormalTok{,}
+      \StringTok{"suspected"} \OtherTok{=} \StringTok{"Suspected"}\NormalTok{,}
+      \StringTok{"not\_suspected"} \OtherTok{=} \StringTok{"Not suspected"}
+\NormalTok{    )}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Symptom reporting by diagnosis"}\NormalTok{,}
+    \AttributeTok{subtitle =} \StringTok{"Within{-}category outcome distributions"}\NormalTok{,}
+    \AttributeTok{x =} \ConstantTok{NULL}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Proportion of records"}\NormalTok{,}
+    \AttributeTok{fill =} \ConstantTok{NULL}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{report_files/figure-latex/diagnosis-symptoms-1} 
+
+}
+
+\caption{Distribution of reported symptoms within COVID-19 diagnostic categories.}\label{fig:diagnosis-symptoms}
+\end{figure}
+
+Symptom reporting differed markedly across diagnostic categories. All
+suspected cases with observed symptom outcomes were symptomatic, while
+89 records classified as not suspected also reported symptoms.
+Restriction to suspected and confirmed cases would retain only four
+asymptomatic records, substantially limiting outcome variation. These
+findings support retaining all diagnostic categories in the primary
+analytical cohort and treating diagnosis as a descriptive characteristic
+rather than a routine adjustment variable.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ard }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{count}\NormalTok{(reporting\_source, diagnosis) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{group\_by}\NormalTok{(reporting\_source) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{proportion =}\NormalTok{ n }\SpecialCharTok{/} \FunctionTok{sum}\NormalTok{(n)}
+\NormalTok{  ) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{ungroup}\NormalTok{() }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{ggplot}\NormalTok{(}
+    \FunctionTok{aes}\NormalTok{(}
+      \AttributeTok{x =}\NormalTok{ reporting\_source,}
+      \AttributeTok{y =}\NormalTok{ proportion,}
+      \AttributeTok{fill =}\NormalTok{ diagnosis}
+\NormalTok{    )}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{geom\_col}\NormalTok{(}\AttributeTok{width =} \FloatTok{0.6}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_text}\NormalTok{(}
+    \FunctionTok{aes}\NormalTok{(}
+      \AttributeTok{label =} \FunctionTok{if\_else}\NormalTok{(}
+\NormalTok{        proportion }\SpecialCharTok{\textgreater{}=} \FloatTok{0.12}\NormalTok{,}
+\NormalTok{        scales}\SpecialCharTok{::}\FunctionTok{percent}\NormalTok{(proportion, }\AttributeTok{accuracy =} \FloatTok{0.1}\NormalTok{),}
+        \StringTok{""}
+\NormalTok{      ),}
+      \AttributeTok{colour =}\NormalTok{ diagnosis }\SpecialCharTok{==} \StringTok{"suspected"}
+\NormalTok{    ),}
+    \AttributeTok{position =} \FunctionTok{position\_stack}\NormalTok{(}\AttributeTok{vjust =} \FloatTok{0.5}\NormalTok{),}
+    \AttributeTok{size =} \FloatTok{3.5}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}
+    \AttributeTok{values =} \FunctionTok{c}\NormalTok{(}
+      \StringTok{"confirmed"} \OtherTok{=} \StringTok{"\#AD1759"}\NormalTok{,}
+      \StringTok{"suspected"} \OtherTok{=} \StringTok{"\#F58860"}\NormalTok{,}
+      \StringTok{"not\_suspected"} \OtherTok{=} \StringTok{"\#35193E"}
+\NormalTok{    ),}
+    \AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}
+      \StringTok{"confirmed"} \OtherTok{=} \StringTok{"Confirmed"}\NormalTok{,}
+      \StringTok{"suspected"} \OtherTok{=} \StringTok{"Suspected"}\NormalTok{,}
+      \StringTok{"not\_suspected"} \OtherTok{=} \StringTok{"Not suspected"}
+\NormalTok{    )}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{scale\_colour\_manual}\NormalTok{(}
+    \AttributeTok{values =} \FunctionTok{c}\NormalTok{(}
+      \StringTok{"TRUE"} \OtherTok{=} \StringTok{"\#35193E"}\NormalTok{,}
+      \StringTok{"FALSE"} \OtherTok{=} \StringTok{"white"}
+\NormalTok{    ),}
+    \AttributeTok{guide =} \StringTok{"none"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{scale\_y\_continuous}\NormalTok{(}
+    \AttributeTok{labels =}\NormalTok{ scales}\SpecialCharTok{::}\FunctionTok{label\_percent}\NormalTok{()}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{scale\_x\_discrete}\NormalTok{(}
+    \AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}
+      \StringTok{"clinicians"} \OtherTok{=} \StringTok{"Clinicians"}\NormalTok{,}
+      \StringTok{"patients"} \OtherTok{=} \StringTok{"Patients"}
+\NormalTok{    )}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Diagnosis by reporting source"}\NormalTok{,}
+    \AttributeTok{subtitle =} \StringTok{"Within{-}source diagnostic distributions"}\NormalTok{,}
+    \AttributeTok{x =} \ConstantTok{NULL}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Proportion of records"}\NormalTok{,}
+    \AttributeTok{fill =} \ConstantTok{NULL}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{report_files/figure-latex/reporting-diagnosis-1} 
+
+}
+
+\caption{Diagnostic composition of clinician- and patient-reported records.}\label{fig:reporting-diagnosis}
+\end{figure}
+
+Confirmed COVID-19 accounted for 52.4\% of clinician reports but only
+1.5\% of patient reports. This substantial difference suggests
+heterogeneous case ascertainment and reporting processes. Consequently,
+reporting source may capture differences in selection, diagnostic
+verification and clinical presentation, rather than functioning solely
+as a conventional demographic covariate.
+
+\subsubsection{Exposure-specific statistical
+support}\label{exposure-specific-statistical-support}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{primary\_support }\OtherTok{\textless{}{-}}\NormalTok{ ard }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{filter}\NormalTok{(eligible\_adjusted) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{group\_by}\NormalTok{(dmt\_status) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{summarise}\NormalTok{(}
+    \AttributeTok{records =} \FunctionTok{n}\NormalTok{(),}
+    \AttributeTok{events =} \FunctionTok{sum}\NormalTok{(symptoms }\SpecialCharTok{==} \DecValTok{1}\NormalTok{),}
+    \AttributeTok{non\_events =} \FunctionTok{sum}\NormalTok{(symptoms }\SpecialCharTok{==} \DecValTok{0}\NormalTok{),}
+    \AttributeTok{.groups =} \StringTok{"drop"}
+\NormalTok{  ) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{proportion =}\NormalTok{ events }\SpecialCharTok{/}\NormalTok{ records,}
+    \AttributeTok{z =} \FunctionTok{qnorm}\NormalTok{(}\FloatTok{0.975}\NormalTok{),}
+
+    \AttributeTok{denominator =} \DecValTok{1} \SpecialCharTok{+}\NormalTok{ z}\SpecialCharTok{\^{}}\DecValTok{2} \SpecialCharTok{/}\NormalTok{ records,}
+
+    \AttributeTok{centre =}\NormalTok{ (}
+\NormalTok{      proportion }\SpecialCharTok{+}\NormalTok{ z}\SpecialCharTok{\^{}}\DecValTok{2} \SpecialCharTok{/}\NormalTok{ (}\DecValTok{2} \SpecialCharTok{*}\NormalTok{ records)}
+\NormalTok{    ) }\SpecialCharTok{/}\NormalTok{ denominator,}
+
+    \AttributeTok{half\_width =}\NormalTok{ (}
+\NormalTok{      z }\SpecialCharTok{*} \FunctionTok{sqrt}\NormalTok{(}
+\NormalTok{        proportion }\SpecialCharTok{*}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ proportion) }\SpecialCharTok{/}\NormalTok{ records }\SpecialCharTok{+}
+\NormalTok{          z}\SpecialCharTok{\^{}}\DecValTok{2} \SpecialCharTok{/}\NormalTok{ (}\DecValTok{4} \SpecialCharTok{*}\NormalTok{ records}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{      )}
+\NormalTok{    ) }\SpecialCharTok{/}\NormalTok{ denominator,}
+
+    \AttributeTok{lower =}\NormalTok{ centre }\SpecialCharTok{{-}}\NormalTok{ half\_width,}
+    \AttributeTok{upper =}\NormalTok{ centre }\SpecialCharTok{+}\NormalTok{ half\_width}
+\NormalTok{  )}
+
+\NormalTok{primary\_support }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{ggplot}\NormalTok{(}
+    \FunctionTok{aes}\NormalTok{(}
+      \AttributeTok{x =}\NormalTok{ dmt\_status,}
+      \AttributeTok{y =}\NormalTok{ proportion}
+\NormalTok{    )}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{geom\_errorbar}\NormalTok{(}
+    \FunctionTok{aes}\NormalTok{(}
+      \AttributeTok{ymin =}\NormalTok{ lower,}
+      \AttributeTok{ymax =}\NormalTok{ upper}
+\NormalTok{    ),}
+    \AttributeTok{width =} \FloatTok{0.15}\NormalTok{,}
+    \AttributeTok{colour =} \StringTok{"\#35193E"}\NormalTok{,}
+    \AttributeTok{linewidth =} \FloatTok{0.8}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}
+    \AttributeTok{colour =} \StringTok{"\#AD1759"}\NormalTok{,}
+    \AttributeTok{size =} \FloatTok{3.5}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{scale\_y\_continuous}\NormalTok{(}
+    \AttributeTok{labels =}\NormalTok{ scales}\SpecialCharTok{::}\FunctionTok{label\_percent}\NormalTok{(),}
+    \AttributeTok{limits =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{0.6}\NormalTok{)}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Symptom proportions by DMT status"}\NormalTok{,}
+    \AttributeTok{subtitle =} \StringTok{"Unadjusted estimates with 95\% Wilson intervals"}\NormalTok{,}
+    \AttributeTok{x =} \ConstantTok{NULL}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Records reporting symptoms"}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{report_files/figure-latex/exposure-support-1} 
+
+}
+
+\caption{Observed symptom proportions by DMT status with 95\% Wilson confidence intervals.}\label{fig:exposure-support}
+\end{figure}
+
+\begin{longtable}[]{@{}lrrrr@{}}
+\caption{Outcome support in the secondary analytical
+cohort.}\tabularnewline
+\toprule\noalign{}
+Exposure & Records & Symptoms & No symptoms & Symptoms (\%) \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Exposure & Records & Symptoms & No symptoms & Symptoms (\%) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Other identified DMT & 588 & 187 & 401 & 31.8 \\
+Anti-CD20 & 99 & 33 & 66 & 33.3 \\
+\end{longtable}
+
+Both primary and secondary treatment specifications retained variation
+in the binary outcome across exposure categories. The secondary cohort
+included 33 symptomatic and 66 asymptomatic anti-CD20 records, providing
+initial support for coefficient estimation. Nevertheless, unequal
+exposure-group sizes and potential sparsity within covariate
+combinations required further assessment of model estimability.
+
+\section{Discussion}\label{discussion}
+
+\subsection{Interpretation and fitness for
+purpose}\label{interpretation-and-fitness-for-purpose}
+
+\subsection{Limitations and future
+research}\label{limitations-and-future-research}
+
+\subsection{Ethics and data
+governance}\label{ethics-and-data-governance}
+
+\section{Reproducibility and
+Metadata}\label{reproducibility-and-metadata}
+
+\section{Conclusion}\label{conclusion}
+
+\section*{References}\label{references}
+\addcontentsline{toc}{section}{References}
+
+\protect\phantomsection\label{refs}
+\begin{CSLReferences}{1}{1}
+\bibitem[\citeproctext]{ref-evangelou2021}
+{Evangelou, Nikos et al.} 2021. {`Self-Diagnosed COVID-19 in People with
+Multiple Sclerosis: A Community-Based Cohort of the UK MS Register'}.
+\emph{Journal of Neurology, Neurosurgery and Psychiatry}, ahead of
+print. \url{https://doi.org/10.1136/jnnp-2020-324449}.
+
+\bibitem[\citeproctext]{ref-khan2024}
+Khan, Hamza, Lotte Geys, Peer Baneke, Giancarlo Comi, and Liesbet M.
+Peeters. 2024. {`Patient Level Dataset to Study the Effect of COVID-19
+in People with Multiple Sclerosis'}. \emph{Scientific Data}, ahead of
+print. \url{https://doi.org/10.1038/s41597-024-02978-x}.
+
+\bibitem[\citeproctext]{ref-peeters2020}
+{Peeters, L. M. et al.} 2020. {`{COVID-19} in People with Multiple
+Sclerosis: A Global Data Sharing Initiative'}. \emph{Multiple Sclerosis
+Journal} 26 (10): 1157--62.
+\url{https://doi.org/10.1177/1352458520941485}.
+
+\bibitem[\citeproctext]{ref-simpson2022}
+{Simpson-Yap, Steve et al.} 2022. {`Updated Results of the COVID-19 in
+MS Global Data Sharing Initiative: Anti-CD20 and Other Risk Factors
+Associated with COVID-19 Severity'}. \emph{Neurology: Neuroimmunology
+and Neuroinflammation}, ahead of print.
+\url{https://doi.org/10.1212/NXI.0000000000200021}.
+
+\bibitem[\citeproctext]{ref-sormani2021}
+{Sormani, Maria Pia et al.} 2021. {`Disease-Modifying Therapies and
+Coronavirus Disease 2019 Severity in Multiple Sclerosis'}. \emph{Annals
+of Neurology}, ahead of print. \url{https://doi.org/10.1002/ana.26028}.
+
+\bibitem[\citeproctext]{ref-struyf2022}
+{Struyf, Thomas et al.} 2022. {`Signs and Symptoms to Determine If a
+Patient Presenting in Primary Care or Hospital Outpatient Settings Has
+COVID-19'}. \emph{Cochrane Database of Systematic Reviews}, ahead of
+print. \url{https://doi.org/10.1002/14651858.CD013665.pub3}.
+
+\end{CSLReferences}
+
+\end{document}

@@ -1,106 +1,854 @@
 ---
-title: "Disease-modifying therapy and reported COVID-19 symptoms in multiple sclerosis"
-subtitle: "Analysis-ready data asset | Working prototype v0.1"
+title: "Disease-modifying therapies and COVID-19 symptom reporting in multiple sclerosis"
+author: "Zina Tevzadze | MSt Healthcare Data Science | University of Cambridge"
+date: "November 2026"
 output:
-  html_document:
+  bookdown::html_document2:
+    theme: journal
     toc: true
-    toc_float: true
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+    toc_depth: 2
     number_sections: true
-    theme: cosmo
     code_folding: hide
+    self_contained: true
+    fig_caption: true
+  pdf_document:
+    toc: true
+    toc_depth: '2'
+subtitle: "Development and validation of an analysis-ready dataset"
 bibliography: references.bib
+link-citations: true
+lang: "en-GB"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo=TRUE, warning=TRUE, message=FALSE, fig.width=8, fig.height=4.5, dpi=150)
-source('R/run_pipeline.R', local=TRUE)
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = TRUE,
+  message = FALSE,
+  fig.width = 8,
+  fig.height = 4.8,
+  fig.align = "center",
+  dpi = 300,
+  out.width = "100%"
+)
+
 library(ggplot2)
 library(dplyr)
-theme_set(theme_minimal(base_size=12))
+
+source("R/00_theme.R")
+ggplot2::theme_set(theme_hds())
+
+source("R/run_pipeline.R", local = TRUE)
 ```
 
-# Abstract (working outline)
 
-**Background:** Disease-modifying therapies (DMTs) may alter immune responses, but symptom reports and diagnostic categories are not interchangeable [@sormani2021; @struyf2022]. **Aim:** Develop a documented, validated data asset for examining treatment–symptom associations and reporting heterogeneity. **Methods:** Audit the open GDSI dataset, specify phenotypes and assess readiness for logistic regression. **Results:** To be completed after local execution and interpretation. **Conclusion:** To be written independently after validation.
+# Abstract {-}
 
-# Research question and rationale
+Disease-modifying therapies (DMTs) may influence immune responses in people with multiple sclerosis (MS), but heterogeneous COVID-19 reporting complicates observational research. This study aimed to construct and validate an analysis-ready dataset (ARD) for exploratory investigation of DMT status, anti-CD20 exposure and reported COVID-19-compatible symptoms.
 
-How is disease-modifying therapy status associated with reported COVID-19 symptoms in people with multiple sclerosis, and how does this association vary across diagnostic classifications and reporting sources?
+A total of 1,141 records and 47 source variables were audited for missingness and reporting heterogeneity. Treatment phenotypes were derived, and primary and secondary analytical cohorts were defined. Descriptive symptom proportions and logistic regression readiness checks assessed analytical suitability; adjusted treatment effects were not estimated.
 
-## Literature review — working synthesis
+The validated ARD contained 20 variables, with 1,133 records eligible for primary analysis and 687 for the secondary comparison. Symptom prevalence was 33.3% among anti-CD20 users and 31.8% among other identified-DMT users. Both proposed regression specifications were computationally estimable.
 
-Research on COVID-19 severity in MS has identified treatment-specific associations, particularly for anti-CD20 therapies [@sormani2021; @simpson2022]. These results motivate investigation of treatment heterogeneity but cannot establish associations with symptom occurrence. Community-based research distinguishes self-diagnosed and confirmed COVID-19 [@evangelou2020]. Symptom-based identification has limited diagnostic specificity [@struyf2022]. Conditioning on diagnostic classification may introduce selection bias under plausible causal structures [@hernan2004]. The student should critically compare study populations, endpoints, timing, adjustment strategies and overlapping registries before finalising this section.
+Reporting heterogeneity, diagnostic uncertainty and incomplete clinical measurements constrain inference. The ARD provides a reproducible foundation for subsequent analyses rather than evidence of treatment effects. Reproduction instructions are provided in Appendix B. 
 
-# Source data and study specification
+# Introduction and Literature Review
 
-The source is the open COVID-MS GDSI dataset distributed through the Cambridge course repository. The observation unit is a source participant record. This is an observational secondary analysis; temporal order and representativeness are not established. Verify the original descriptor, collection period, licence and anonymisation details before submission [@khan2024].
+## Clinical background
 
-```{r source-summary}
-knitr::kable(data.frame(records=nrow(raw), variables=ncol(raw), duplicate_ids=sum(duplicated(raw$secret_name))))
+Multiple sclerosis (MS) is a chronic immune-mediated disorder of the central nervous system characterised by inflammation, demyelination and neurodegeneration. Disease-modifying therapies (DMTs) aim to reduce inflammatory disease activity and limit disability accumulation. However, their effects on immune function differ according to their mechanisms of action, potentially influencing susceptibility to infection and subsequent clinical manifestations.
+
+The COVID-19 pandemic raised concerns regarding the management of people with MS, particularly those receiving immunosuppressive or immunomodulatory therapies. International data-sharing initiatives were established to investigate these concerns using real-world clinical and patient-reported information [@peeters2020].
+
+## Disease-modifying therapies and COVID-19
+
+Observational studies have identified heterogeneous associations between individual DMTs and COVID-19 severity. Sormani et al. reported an association between anti-CD20 treatment and more severe COVID-19 outcomes [@sormani2021]. Similarly, international analyses identified associations between rituximab, ocrelizumab and adverse clinical outcomes, alongside patient characteristics such as age, MS phenotype and disability [@simpson2022].
+
+These findings suggest that treating DMT exposure as a homogeneous category may obscure clinically meaningful differences. In particular, B-cell-depleting therapies have distinct immunological effects compared with other DMT classes, motivating a mechanism-based classification of treatment exposure.
+
+Nevertheless, evidence concerning COVID-19 severity among infected individuals cannot be directly extrapolated to the occurrence of reported symptoms. Community-based research has demonstrated that associations may differ according to whether COVID-19 is self-diagnosed or laboratory-confirmed [@evangelou2021]. Furthermore, symptoms alone have limited diagnostic specificity for SARS-CoV-2 infection [@struyf2022].
+
+## Research rationale and objectives
+
+The publicly available COVID-MS dataset provides an opportunity to investigate treatment–symptom associations using heterogeneous real-world data [@khan2024]. However, differences in reporting source, diagnostic classification, clinical granularity and data completeness may affect the validity and interpretability of subsequent analyses.
+
+
+<div class="alert alert-danger" role="note">
+**Research question:** How can an analysis-ready dataset be developed and validated to investigate associations between DMT status, anti-CD20 exposure and COVID-19-compatible symptoms in people with multiple sclerosis?
+</div>
+
+This study aims to construct and validate a reproducible analysis-ready dataset suitable for exploratory assessment of treatment–symptom patterns and subsequent multivariable logistic regression. The objectives are to establish clinically defensible treatment phenotypes, assess source-data quality and missingness, define appropriate analytical populations and evaluate the computational estimability of the proposed models.
+
+# Methods
+
+## Data source and study design
+
+This study used the publicly available COVID-19 in MS Global Data Sharing Initiative (GDSI) dataset [@khan2024]. Data were collected using a questionnaire-based platform through which clinicians, people with multiple sclerosis (PwMS), or their representatives submitted demographic, clinical, treatment and COVID-19-related information.
+
+This observational, cross-sectional study was designed around two objectives: to develop a documented, reproducible analysis-ready dataset (ARD) and to evaluate its suitability for investigating associations between disease-modifying therapy (DMT) exposure and reported COVID-19-compatible symptoms in people with multiple sclerosis. Two analytical populations were defined to examine treatment status in the broader cohort and anti-CD20 exposure among current users of identified DMTs. Clinically informed treatment classifications were derived from the source data, with symptom reporting operationalised as a binary outcome. The emphasis was placed on transparent phenotype construction, analytical eligibility and validation rather than causal inference.
+
+```{r source-summary, include=FALSE}
+source_summary <- tibble::tibble(
+  records = nrow(raw),
+  variables = ncol(raw),
+  unique_ids = dplyr::n_distinct(raw$secret_name),
+  duplicate_ids = sum(duplicated(raw$secret_name)),
+  missing_ids = sum(is.na(raw$secret_name))
+)
 ```
 
-# Source-data assessment
+## Variable selection and phenotype definitions
 
-## Missingness and variable utility
+The primary outcome was defined as the reported presence of one or more COVID-19-compatible symptoms, using the source variable `covid19_has_symptoms`. Positive and negative responses were encoded as 1 and 0, respectively, while missing responses remained unavailable. This phenotype represents reported symptom occurrence rather than confirmed SARS-CoV-2 infection or clinical severity.
 
-```{r missingness}
-audit |> filter(missing_n>0) |> slice_head(n=15) |> ggplot(aes(reorder(variable,missing_pct),missing_pct)) + geom_col(fill='#315C78') + coord_flip() + labs(x=NULL,y='Missing (%)',title='Variables with greatest missingness')
+DMT exposure was operationalised through three derived categorical variables. First, `dmt_status` classified records as never treated, not currently treated or currently treated, based on the source treatment-status variable. This three-level nominal exposure was retained for the primary analysis to compare symptom reporting across treatment statuses.
+
+Individual DMT identities were recoded into clinically informed pharmacological groups (`dmt_class`), based on published treatment classifications [@reder2021]. The resulting categories and their constituent therapies are presented in Table \@ref(tab:dmt-classification). A separate binary variable (`dmt_anti_cd20`) distinguished anti-CD20 therapies from other identified DMTs among current users, enabling the secondary exposure comparison while excluding unspecified drug identities.
+
+Age, sex, MS phenotype and comorbidity status were selected as candidate adjustment variables. Diagnostic classification and reporting source were retained to evaluate reporting heterogeneity. Complete variable definitions, derivation rules and analytical roles were documented in the accompanying metadata.
+
+
+```{r variable-specification, echo=FALSE}
+variable_specification <- tibble::tribble(
+  ~`ARD variable`, ~`Data type`, ~`Coding / categories`, ~`Analytical role`,
+
+  "dmt_status",
+  "Nominal factor",
+  "Never; Not currently; Current",
+  "Primary exposure",
+
+  "dmt_class",
+  "Nominal factor",
+  "Pharmacological groups; unspecified; treatment-status categories",
+  "Descriptive treatment classification",
+
+  "dmt_anti_cd20",
+  "Binary factor",
+  "Other identified DMT; Anti-CD20",
+  "Secondary exposure",
+
+  "symptoms",
+  "Binary integer",
+  "0 = No; 1 = Yes; NA = Missing",
+  "Primary outcome",
+
+  "age_group",
+  "Categorical factor",
+  "Source age categories (0–3)",
+  "Adjustment covariate",
+
+  "sex",
+  "Nominal factor",
+  "Female; Male",
+  "Adjustment covariate",
+
+  "ms_type",
+  "Nominal factor",
+  "Relapsing-remitting; Progressive MS; Other",
+  "Adjustment covariate",
+
+  "comorbidities",
+  "Binary factor",
+  "No; Yes",
+  "Adjustment covariate",
+
+  "reporting_source",
+  "Nominal factor",
+  "Patients; Clinicians",
+  "Reporting heterogeneity",
+
+  "diagnosis",
+  "Nominal factor",
+  "Not suspected; Suspected; Confirmed",
+  "Diagnostic heterogeneity",
+
+  "hospitalisation",
+  "Categorical character",
+  "Source-recorded hospital admission",
+  "Supporting clinical outcome",
+
+  "icu_admission",
+  "Categorical character",
+  "Source-recorded ICU admission",
+  "Supporting clinical outcome",
+
+  "ventilation",
+  "Categorical character",
+  "Source-recorded ventilation",
+  "Supporting clinical outcome"
+)
+
+knitr::kable(
+  variable_specification,
+  caption = "Analysis-ready dataset variables, coding and analytical roles."
+)
 ```
 
-```{r missing-source}
-missing_by_source |> filter(variable %in% c('covid19_has_symptoms','edss_in_cat2','bmi_in_cat2','current_or_former_smoker','dmt_type_overall')) |> ggplot(aes(report_source,variable,fill=missing_pct)) + geom_tile() + geom_text(aes(label=sprintf('%.1f%%',missing_pct))) + scale_fill_gradient(low='#F2F5F7',high='#527C96',limits=c(0,100)) + labs(x=NULL,y=NULL,fill='Missing %')
+
+## Data quality assessment and preprocessing
+
+Source-data quality was assessed across completeness, validity, uniqueness and cross-field consistency (checks implemented in `01_import.R`, `02_audit.R` and `03_prepare.R`). Structural checks included record identifiers, dataset dimensions, permitted categorical values and agreement between related clinical variables.
+
+Missingness was quantified overall and by reporting source. Conditional relationships between variables were examined to distinguish structurally inapplicable information from unavailable clinical information. Missing values were not automatically interpreted as negative findings or subjected to blanket imputation.
+
+Categorical variables were harmonised into explicitly defined levels, preserving the clinical meaning of the original source categories. Treatment identities were retained alongside derived treatment groups.
+
+All source records were retained in the master ARD. Analysis-specific eligibility indicators were derived according to outcome availability, exposure definition and covariate completeness. Variables with insufficient observed variation, uncertain clinical interpretation or inadequate completeness were excluded from the primary analytical specification.
+
+The resulting dataset was subjected to automated structural and logical validation, including verification of derived treatment phenotypes, eligibility criteria and consistency between the in-memory dataset and its exported RDS representation.
+
+## Analytical specification and validation
+
+Multivariable binary logistic regression was specified as the intended downstream analytical method because the outcome—reported COVID-19-compatible symptoms—is binary. Two exposure specifications were defined: DMT status in the primary cohort and anti-CD20 exposure versus other identified DMTs in the secondary cohort. Candidate adjustment variables comprised age group, sex, MS phenotype and comorbidity status.
+
+The present study focused on exploratory descriptive analysis and assessment of analytical readiness rather than estimation of adjusted treatment effects. Symptom proportions and 95% Wilson confidence intervals were calculated across exposure groups. The proposed regression specifications were evaluated for design-matrix rank, coefficient separation, convergence and multicollinearity. These checks assess computational estimability but do not establish causal identification, adequate confounding control or clinical validity.
+
+The proposed downstream logistic regression model was:
+
+The general analytical specification could be:
+
+$$
+\log\left(\frac{p_i}{1-p_i}\right)
+=
+\beta_0 +
+\boldsymbol{\beta}^{T}\mathbf{D}_i +
+\boldsymbol{\gamma}^{T}\mathbf{X}_i
+$$
+
+where $p_i$ denotes the probability of reported COVID-19-compatible symptoms, $\mathbf{D}_i$ represents the treatment exposure and $\mathbf{X}_i$ contains the candidate adjustment variables.
+
+
+```{r analytical-specification, include=FALSE}
+formula_primary <- symptoms ~
+  dmt_status +
+  age_group +
+  sex +
+  ms_type +
+  comorbidities
+
+formula_secondary <- symptoms ~
+  dmt_anti_cd20 +
+  age_group +
+  sex +
+  ms_type +
+  comorbidities
+
+primary_data <- ard |>
+  filter(eligible_adjusted) |>
+  droplevels()
+
+secondary_data <- ard |>
+  filter(eligible_class) |>
+  droplevels()
 ```
 
-Interpretation prompt: distinguish structural missingness from unknown values; inspect EDSS and smoking variation. Do not recode missing as absence.
 
-## Diagnostic and reporting heterogeneity
+# Results
 
-```{r diagnostic-symptoms}
-knitr::kable(dx_sym)
-dx_sym |> mutate(symptom_status=coalesce(covid19_has_symptoms,'Missing')) |> ggplot(aes(covid19_diagnosis,n,fill=symptom_status)) + geom_col(position='fill') + scale_y_continuous(labels=scales::label_percent()) + labs(x='Recorded diagnosis',y='Within-category proportion',fill='Symptoms')
+## Source-data quality and missingness
+
+The source dataset comprised `r source_summary$records` records and `r source_summary$variables` variables. 
+
+Patient-reported records accounted for `r round(100 * mean(raw$report_source == "patients"), 1)`% of the dataset, compared with `r round(100 * mean(raw$report_source == "clinicians"), 1)`% submitted by clinicians.
+
+
+```{r missingness, eval=FALSE, fig.cap="Variables with the highest proportions of missing source values.", fig.height=5.5, include=FALSE}
+audit |>
+  filter(missing_n > 0) |>
+  slice_max(
+    order_by = missing_pct,
+    n = 15,
+    with_ties = FALSE
+  ) |>
+  ggplot(
+    aes(
+      x = reorder(variable, missing_pct),
+      y = missing_pct,
+      fill = missing_pct
+    )
+  ) +
+  geom_col(width = 0.7) +
+  geom_text(
+    aes(label = sprintf("%.1f%%", missing_pct)),
+    hjust = -0.15,
+    size = 3
+  ) +
+  coord_flip() +
+  scale_fill_gradientn(
+    colours = rev(rocket),
+    limits = c(0, 100)
+  ) +
+  scale_y_continuous(
+    limits = c(0, 100)
+  ) +
+  guides(fill = "none") +
+  labs(
+    title = "Source-data completeness",
+    subtitle = "15 variables with greatest missingness",
+    x = NULL,
+    y = "Missing values (%)"
+  )
 ```
 
-```{r reporting-diagnosis}
-source_dx |> ggplot(aes(report_source,n,fill=covid19_diagnosis)) + geom_col(position='fill') + scale_y_continuous(labels=scales::label_percent()) + labs(x='Reporting source',y='Within-source proportion',fill='Diagnosis')
+```{r missing-source, fig.height=4.5, fig.cap="Missingness in selected clinical variables by reporting source."}
+
+missing_labels <- c(
+  edss_in_cat2 = "EDSS",
+  dmt_type_overall = "DMT identity",
+  current_or_former_smoker = "Smoking history",
+  covid19_has_symptoms = "Symptom outcome",
+  bmi_in_cat2 = "BMI"
+)
+
+missing_by_source |>
+  filter(variable %in% names(missing_labels)) |>
+  mutate(
+    variable_label = factor(
+      unname(missing_labels[variable]),
+      levels = rev(unname(missing_labels))
+    ),
+    report_source = factor(
+      report_source,
+      levels = c("clinicians", "patients"),
+      labels = c(
+        "Clinician (n = 84)",
+        "Patient (n = 1,057)"
+      )
+    )
+  ) |>
+  ggplot(
+    aes(
+      x = report_source,
+      y = variable_label,
+      fill = missing_pct
+    )
+  ) +
+  geom_tile(
+    colour = "white",
+    linewidth = 1
+  ) +
+  geom_text(
+    aes(
+      label = sprintf("%.1f%%", missing_pct),
+      colour = missing_pct >= 40
+    ),
+    size = 4
+  ) +
+  scale_fill_gradientn(
+    colours = rev(rocket),
+    limits = c(0, 100),
+    breaks = seq(0, 100, 25)
+  ) +
+  scale_colour_manual(
+    values = c(
+      "TRUE" = "white",
+      "FALSE" = "#35193E"
+    ),
+    guide = "none"
+  ) +
+  labs(
+    title = "Missingness by reporting source",
+    subtitle = "Selected clinically relevant variables",
+    x = NULL,
+    y = NULL,
+    fill = "Missing (%)"
+  ) +
+  theme(
+    panel.grid = element_blank(),
+    axis.ticks = element_blank(),
+    legend.position = "bottom"
+  )
 ```
 
-```{r three-way}
-three_way |> mutate(symptom_status=coalesce(covid19_has_symptoms,'Missing')) |> ggplot(aes(covid19_diagnosis,n,fill=symptom_status)) + geom_col(position='fill') + facet_wrap(~report_source) + scale_y_continuous(labels=scales::label_percent()) + labs(x='Diagnosis',y='Within-group proportion',fill='Symptoms')
+Missingness varied substantially by reporting source. EDSS was more frequently unavailable in patient reports than clinician reports (57.4% versus 13.1%), whereas BMI and smoking history exhibited greater missingness in clinician reports. All eight missing primary symptom outcomes occurred among clinician-reported records. These differences demonstrate heterogeneous data availability across reporting streams and highlight the potential for selection bias under complete-case analysis.
+
+Variable exclusion was not determined by missingness alone. All 523 available EDSS observations belonged to the same released disability category, precluding estimation of associations with disability level. Exclusion of potentially relevant covariates, particularly disability and BMI, nevertheless limits adjustment for clinical differences between treatment groups.
+
+Supplementary assessments of treatment-related missingness and variable exclusion decisions are provided in Appendix Tables A1 and A2, respectively.
+
+## Feature engineering and cohort construction
+
+The preparation pipeline produced an ARD containing `r nrow(ard)` records and `r ncol(ard)` variables. All source records were retained.
+
+The resulting data structure incorporated harmonised clinical variables, a binary symptom phenotype, derived treatment classifications and analysis-specific eligibility indicators. Original drug identities were preserved alongside the derived exposure definitions.
+
+
+```{r dmt-classification, echo=FALSE}
+ard |>
+  filter(dmt_status == "Current") |>
+  group_by(dmt_class) |>
+  summarise(
+    Records = n(),
+    Treatments = paste(
+      sort(unique(
+        sub("currently on ", "", na.omit(dmt_type))
+      )),
+      collapse = ", "
+    ),
+    .groups = "drop"
+  ) |>
+  mutate(
+    Treatments = if_else(
+      Treatments == "",
+      "Identity unavailable",
+      Treatments
+    ),
+    Percentage = round(
+      100 * Records / sum(Records), 1
+    )
+  ) |>
+  arrange(desc(Records)) |>
+  rename(`Treatment group` = dmt_class) |>
+  knitr::kable(
+    caption = "Drug identity availability and structural applicability by treatment status."
+  )
 ```
 
-Interpretation prompt: compare conditional proportions and cell counts. Internal agreement is not diagnostic accuracy; reporting source may reflect recruitment and testing differences.
 
-## Treatment status and symptom reporting
-
-```{r treatment}
-dmt_summary <- ard |> group_by(dmt_status) |> summarise(total=n(), observed=sum(!is.na(symptoms)), symptomatic=sum(symptoms==1,na.rm=TRUE), proportion=symptomatic/observed,.groups='drop')
-knitr::kable(dmt_summary,digits=3)
-ggplot(dmt_summary,aes(dmt_status,proportion)) + geom_col(fill='#315C78') + scale_y_continuous(labels=scales::label_percent(),limits=c(0,1)) + labs(x='DMT status',y='Proportion among observed symptom records')
+```{r dmt-distribution, fig.height=4.8, fig.cap="Distribution of derived treatment groups among current DMT users."}
+ard |>
+  filter(dmt_status == "Current") |>
+  count(dmt_class, name = "records") |>
+  mutate(
+    group = case_when(
+      dmt_class == "Anti-CD20" ~ "Target exposure",
+      dmt_class %in% c(
+        "Other unspecified", "Unknown drug"
+      ) ~ "Unidentified treatment",
+      TRUE ~ "Other identified treatment"
+    )
+  ) |>
+  ggplot(
+    aes(
+      x = reorder(dmt_class, records),
+      y = records,
+      fill = group
+    )
+  ) +
+  geom_col(width = 0.7) +
+  geom_text(
+    aes(label = records),
+    hjust = -0.2,
+    size = 3.5
+  ) +
+  coord_flip() +
+  scale_fill_manual(
+    values = c(
+      "Target exposure" = "#AD1759",
+      "Other identified treatment" = "#35193E",
+      "Unidentified treatment" = "#B9B2BB"
+    )
+  ) +
+  scale_y_continuous(
+    expand = expansion(mult = c(0, 0.15))
+  ) +
+  labs(
+    title = "Distribution of current DMT users",
+    subtitle = "Mechanism-informed treatment classification",
+    x = NULL,
+    y = "Number of records",
+    fill = NULL
+  )
 ```
 
-# Phenotype definitions and preparation
 
-See `metadata/phenotype_definitions.md`, `metadata/data_dictionary.csv` and `metadata/decision_log.csv`. The primary outcome is reported symptom presence; the exposure is DMT status at data entry. Preserve original source data and retain eligibility flags. The candidate adjusted analysis includes age, sex, MS phenotype and comorbidities; this set requires independent clinical justification.
+```{r cohort-summary, echo=FALSE}
+cohort_flow <- readr::read_csv(
+  "outputs/tables/cohort_flow.csv",
+  show_col_types = FALSE
+)
 
-# Validation and analytical readiness
-
-```{r validation}
-knitr::kable(flow)
-knitr::kable(model_checks)
+cohort_flow |>
+  dplyr::filter(stage %in% c(
+    "Source records",
+    "Primary eligible",
+    "Secondary anti-CD20 cohort"
+  )) |>
+  dplyr::mutate(
+    stage = dplyr::recode(
+      stage,
+      "Source records" = "Source dataset",
+      "Primary eligible" = "Primary analytical cohort"
+    )
+  ) |>
+  dplyr::select(
+    `Analytical cohort` = stage,
+    `Records` = n,
+    `Source records (%)` = percentage_of_source
+  ) |>
+  knitr::kable(
+    caption = "Record retention and analytical eligibility.",
+    digits = 1
+  )
 ```
 
-```{r subgroup-support}
-knitr::kable(ard |> filter(eligible_primary) |> group_by(diagnosis,reporting_source) |> summarise(n=n(),events=sum(symptoms),non_events=sum(symptoms==0),.groups='drop'))
+The primary adjusted cohort retained 99.3% of source records, with eight exclusions attributable to missing symptom outcomes. Inclusion of the four candidate adjustment variables resulted in no additional record loss. Among current users of identified therapies, 687 records satisfied secondary analytical eligibility, including 99 anti-CD20 and 588 comparator records.
+
+## Analytical readiness and exploratory findings
+
+### Diagnostic and reporting heterogeneity
+
+The relationship between diagnostic classification and reported symptoms was examined to assess outcome interpretability and the feasibility of restricting the analytical population to suspected or confirmed COVID-19 cases.
+
+
+```{r diagnosis-symptoms, fig.height=4.2, fig.cap="Distribution of reported symptoms within COVID-19 diagnostic categories."}
+diagnosis_summary <- ard |>
+  mutate(
+    symptom_status = case_when(
+      symptoms == 1 ~ "Symptoms",
+      symptoms == 0 ~ "No symptoms",
+      TRUE ~ "Missing"
+    ),
+    symptom_status = factor(
+      symptom_status,
+      levels = c(
+        "Symptoms",
+        "No symptoms",
+        "Missing"
+      )
+    )
+  ) |>
+  count(diagnosis, symptom_status) |>
+  group_by(diagnosis) |>
+  mutate(
+    proportion = n / sum(n)
+  ) |>
+  ungroup()
+
+diagnosis_summary |>
+  ggplot(
+    aes(
+      x = diagnosis,
+      y = proportion,
+      fill = symptom_status
+    )
+  ) +
+  geom_col(
+    width = 0.65,
+    position = position_stack(reverse = TRUE)
+  ) +
+  geom_text(
+    aes(
+      label = if_else(
+        proportion >= 0.15,
+        scales::percent(proportion, accuracy = 0.1),
+        ""
+      )
+    ),
+    position = position_stack(
+      vjust = 0.5,
+      reverse = TRUE
+    ),
+    colour = "white",
+    size = 3.5
+  ) +
+  coord_flip() +
+  scale_fill_manual(
+    values = c(
+      "Symptoms" = "#AD1759",
+      "No symptoms" = "#35193E",
+      "Missing" = "#D9D9D9"
+    )
+  ) +
+  scale_y_continuous(
+    labels = scales::label_percent()
+  ) +
+  scale_x_discrete(
+    labels = c(
+      "confirmed" = "Confirmed",
+      "suspected" = "Suspected",
+      "not_suspected" = "Not suspected"
+    )
+  ) +
+  labs(
+    title = "Symptom reporting by diagnosis",
+    subtitle = "Within-category outcome distributions",
+    x = NULL,
+    y = "Proportion of records",
+    fill = NULL
+  )
 ```
 
-The intended method is binary logistic regression. Subgroup estimation requires both outcome levels, adequate support across exposure categories and assessment of separation. Do not fit a model simply because the software returns coefficients. The prototype exports the model matrix rank check; it does not yet establish model adequacy or fit a final model.
+Symptom reporting differed markedly across diagnostic categories. All suspected cases with observed symptom outcomes were symptomatic, while 89 records classified as not suspected also reported symptoms. Restriction to suspected and confirmed cases would retain only four asymptomatic records, substantially limiting outcome variation. These findings support retaining all diagnostic categories in the primary analytical cohort and treating diagnosis as a descriptive characteristic rather than a routine adjustment variable.
 
-# Critical reflection and governance
 
-Develop discussion of confounding by indication, treatment heterogeneity, symptom misclassification, selection and reporting bias, missingness, de-identification and responsible reuse. Explain why diagnosis is not automatically an adjustment variable. Distinguish association from causation and avoid extrapolating to all people with MS. Review the source licence and university AI policy.
+```{r reporting-diagnosis, fig.height=3.5, fig.cap="Diagnostic composition of clinician- and patient-reported records."}
+ard |>
+  count(reporting_source, diagnosis) |>
+  group_by(reporting_source) |>
+  mutate(
+    proportion = n / sum(n)
+  ) |>
+  ungroup() |>
+  ggplot(
+    aes(
+      x = reporting_source,
+      y = proportion,
+      fill = diagnosis
+    )
+  ) +
+  geom_col(width = 0.6) +
+  geom_text(
+    aes(
+      label = if_else(
+        proportion >= 0.12,
+        scales::percent(proportion, accuracy = 0.1),
+        ""
+      ),
+      colour = diagnosis == "suspected"
+    ),
+    position = position_stack(vjust = 0.5),
+    size = 3.5
+  ) +
+  coord_flip() +
+  scale_fill_manual(
+    values = c(
+      "confirmed" = "#AD1759",
+      "suspected" = "#F58860",
+      "not_suspected" = "#35193E"
+    ),
+    labels = c(
+      "confirmed" = "Confirmed",
+      "suspected" = "Suspected",
+      "not_suspected" = "Not suspected"
+    )
+  ) +
+  scale_colour_manual(
+    values = c(
+      "TRUE" = "#35193E",
+      "FALSE" = "white"
+    ),
+    guide = "none"
+  ) +
+  scale_y_continuous(
+    labels = scales::label_percent()
+  ) +
+  scale_x_discrete(
+    labels = c(
+      "clinicians" = "Clinicians",
+      "patients" = "Patients"
+    )
+  ) +
+  labs(
+    title = "Diagnosis by reporting source",
+    subtitle = "Within-source diagnostic distributions",
+    x = NULL,
+    y = "Proportion of records",
+    fill = NULL
+  )
+```
 
-# Reproducibility
+Confirmed COVID-19 accounted for 52.4% of clinician reports but only 1.5% of patient reports. This substantial difference suggests heterogeneous case ascertainment and reporting processes. Consequently, reporting source may capture differences in selection, diagnostic verification and clinical presentation, rather than functioning solely as a conventional demographic covariate.
 
-Run the pipeline from the project root; source data remain unchanged. The CSV and RDS are generated in `data/processed/`. Audit tables and session information are generated in `outputs/`. See README for Git and dependency setup. Final submission must be tested in a fresh R session.
+### Exposure-specific statistical support
 
-# References
+
+```{r exposure-support, fig.height=3.8, fig.cap="Observed symptom proportions by DMT status with 95% Wilson confidence intervals."}
+primary_support <- ard |>
+  filter(eligible_adjusted) |>
+  group_by(dmt_status) |>
+  summarise(
+    records = n(),
+    events = sum(symptoms == 1),
+    non_events = sum(symptoms == 0),
+    .groups = "drop"
+  ) |>
+  mutate(
+    proportion = events / records,
+    z = qnorm(0.975),
+
+    denominator = 1 + z^2 / records,
+
+    centre = (
+      proportion + z^2 / (2 * records)
+    ) / denominator,
+
+    half_width = (
+      z * sqrt(
+        proportion * (1 - proportion) / records +
+          z^2 / (4 * records^2)
+      )
+    ) / denominator,
+
+    lower = centre - half_width,
+    upper = centre + half_width
+  )
+
+primary_support |>
+  ggplot(
+    aes(
+      x = dmt_status,
+      y = proportion
+    )
+  ) +
+  geom_errorbar(
+    aes(
+      ymin = lower,
+      ymax = upper
+    ),
+    width = 0.15,
+    colour = "#35193E",
+    linewidth = 0.8
+  ) +
+  geom_point(
+    colour = "#AD1759",
+    size = 3.5
+  ) +
+  coord_flip() +
+  scale_y_continuous(
+    labels = scales::label_percent(),
+    limits = c(0, 0.6)
+  ) +
+  labs(
+    title = "Symptom proportions by DMT status",
+    subtitle = "Unadjusted estimates with 95% Wilson intervals",
+    x = NULL,
+    y = "Records reporting symptoms"
+  )
+```
+
+Wilson confidence intervals were wider in smaller treatment groups, reflecting greater uncertainty. These descriptive differences should not be interpreted as treatment effects, given potential differences in clinical characteristics, reporting processes and infection ascertainment across groups.
+
+```{r secondary-exposure-support, echo=FALSE}
+secondary_support <- ard |>
+  filter(eligible_class) |>
+  group_by(dmt_anti_cd20) |>
+  summarise(
+    Records = n(),
+    Symptoms = sum(symptoms == 1),
+    `No symptoms` = sum(symptoms == 0),
+    `Symptoms (%)` = round(
+      100 * mean(symptoms == 1), 1
+    ),
+    .groups = "drop"
+  )
+
+secondary_support |>
+  rename(
+    Exposure = dmt_anti_cd20
+  ) |>
+  knitr::kable(
+    caption = "Outcome support in the secondary analytical cohort."
+  )
+```
+
+Both primary and secondary treatment specifications retained variation in the binary outcome across exposure categories. The secondary cohort included 33 symptomatic and 66 asymptomatic anti-CD20 records, providing initial support for coefficient estimation. Nevertheless, unequal exposure-group sizes and potential sparsity within covariate combinations required further assessment of model estimability.
+
+```{r model-validation, echo=FALSE}
+readiness_summary |>
+  select(
+    Model = model,
+    Records = records,
+    Events = events,
+    Parameters = parameters,
+    Rank = rank,
+    Separation = separation,
+    Converged = converged
+  ) |>
+  knitr::kable(
+    caption = "Statistical validation of the proposed logistic regression specifications."
+  )
+```
+
+Both logistic regression specifications demonstrated full-rank design matrices, no detected separation and successful convergence.  These findings support the computational estimability of the proposed models, although they do not establish adequate confounding control or clinical validity. The validated ARD therefore provides a reproducible basis for subsequent estimation of adjusted treatment–symptom associations.
+
+# Discussion
+
+## Interpretation and fitness for purpose
+
+This study produced a validated analysis-ready dataset (ARD) containing 1,141 records and 20 variables, with explicit treatment phenotypes and analytical eligibility criteria. The exploratory findings demonstrate the importance of evaluating data provenance and outcome definitions before investigating clinical associations.
+
+Reported symptoms varied across treatment groups, but these unadjusted differences cannot establish treatment effects. The anti-CD20 comparison retained 99 exposed records and 588 records receiving other identified DMTs, with similar observed symptom proportions (33.3% and 31.8%, respectively). Both proposed logistic regression specifications were computationally estimable, supporting the ARD's suitability for further analysis without establishing clinical validity or adequate confounding control.
+
+## Limitations and future research
+
+The principal limitation is outcome validity. COVID-19-compatible symptoms are not equivalent to confirmed infection, and the strong relationship between diagnostic classification and symptom reporting suggests partial dependence between these measures. Restricting the analysis to suspected or confirmed cases would leave only four asymptomatic records, undermining the proposed binary comparison.
+
+Reporting-source heterogeneity presents a further concern: confirmed diagnoses represented 52.4% of clinician reports but only 1.5% of patient reports. Selection processes, treatment timing and unmeasured clinical characteristics may therefore influence observed patterns. EDSS lacked usable variation, while severe outcomes were too infrequent for reliable investigation.
+
+Future research should prioritise clinically verified outcomes, longitudinal treatment information and more complete disability measurements, alongside sensitivity analyses addressing reporting source.
+
+# Reproducibility and Metadata
+
+The workflow separates source-data import, quality assessment, phenotype construction and validation into executable R scripts. The ARD is exported in CSV and RDS formats, with accompanying variable metadata, phenotype definitions, eligibility indicators and validation outputs. Version-controlled code and documented analytical decisions support independent inspection and reproduction.
+
+# Conclusion
+
+A reproducible, validated ARD was developed to support investigation of DMT status, anti-CD20 exposure and reported COVID-19-compatible symptoms in people with multiple sclerosis. Exploratory analyses identified substantial reporting heterogeneity and limitations in diagnostic and clinical information. Although both proposed logistic regression specifications were computationally estimable, the available data do not support causal conclusions or reliable assessment of COVID-19 severity. The principal contribution is a transparent, clinically informed data asset that makes the opportunities and limitations of subsequent analysis explicit.
+
+# References {-}
+
+<div id="refs"></div>
+
+# Appendix {-}
+
+## Appendix A. Supplementary data-quality assessments {-}
+
+### Table A1. Drug identity availability by treatment status
+
+```{r conditional-missingness, echo=FALSE}
+raw |>
+  group_by(current_dmt) |>
+  summarise(
+    Records = n(),
+    `Missing DMT identity` =
+      sum(is.na(dmt_type_overall)),
+    .groups = "drop"
+  ) |>
+  rename(`Treatment status` = current_dmt) |>
+  knitr::kable(
+    caption = "Availability of drug identity by treatment status."
+  )
+```
+
+### Table A2. Variables excluded from the analytical specification
+
+```{r exclusion-summary, echo=FALSE}
+exclusion_reasons <- tibble::tribble(
+  ~variable, ~Label, ~Reason,
+
+  "edss_in_cat2",
+  "EDSS",
+  "No observed variation",
+
+  "current_or_former_smoker",
+  "Smoking history",
+  "Incomplete and ambiguous coding",
+
+  "duration_treatment_cat2",
+  "Treatment duration",
+  "Limited completeness and temporal information",
+
+  "bmi_in_cat2",
+  "BMI",
+  "Incomplete and coarsely categorised"
+)
+
+audit |>
+  inner_join(exclusion_reasons, by = "variable") |>
+  transmute(
+    Variable = Label,
+    `Missing (%)` = round(missing_pct, 1),
+    `Exclusion rationale` = Reason
+  ) |>
+  knitr::kable(
+    caption = "Selected exclusions from the primary analytical specification."
+  )
+```
+
+## Appendix B. Reproduction instructions {-}
+
+The analysis was developed in R using a scripted, version-controlled workflow. To reproduce the data preparation and validation:
+
+- Clone the project repository and open `COVID-MS-Capstone.Rproj` in RStudio.
+
+- Install the project dependencies. If an `renv.lock` file is provided, run `renv::restore()` to restore the recorded package environment.
+
+- From the project root, execute: `source("R/run_pipeline.R")` .The pipeline imports the source dataset, audits data quality, constructs the ARD, performs validation and assesses analytical readiness.
+
+- Render `report.Rmd` using the Knit command, or run: `rmarkdown::render("report.Rmd")`
+
+The generated ARD is saved in `data/processed/`, with validation summaries and supporting tables in `outputs/`. The repository contains the scripts, metadata and phenotype specifications required to inspect the transformations. Internet access is required for source-data retrieval if the raw dataset is not already present locally.

@@ -1,0 +1,4 @@
+Source: https://raw.githubusercontent.com/CambridgeICE-HDS/MSt-Healthcare-Data-Science/main/Datasets/COVID-MS/GDSI_OpenDataset_Final.csv
+MD5: 51b84783e55caf6b705a3e78edebea9e
+Rows: 1141
+Columns: 47
